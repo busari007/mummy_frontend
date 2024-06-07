@@ -1,0 +1,107 @@
+#webpage {
+  position: relative; /* Position relative to contain overlay */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  max-width: 100%; /* Ensure content fits within viewport */
+  overflow-x: hidden; /* Hide horizontal overflow */
+  color: #000000;
+  font-weight: 900;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.034); /* Transparent black overlay */
+  z-index: -1; /* Ensure it sits behind other content */
+}
+
+.image-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0px;
+  max-width: 100vw; /* Adjust max-width to fit within viewport */
+  width: 100%; /* Ensure image gallery takes up entire width */
+  margin: 2rem auto; /* Center image gallery horizontally */
+}
+
+.image-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.image-container {
+  position: relative; /* Position relative to place checkbox */
+  width: 100%; /* Ensure container takes up entire width */
+}
+
+.image-item {
+  width: 100%; /* Ensure image takes up entire container width */
+  object-fit: contain;
+}
+
+.checkbox {
+  position: absolute;
+  top: 3%; /* Center checkbox vertically */
+  right: 1%; /* Center checkbox horizontally */
+  transform: translate(-50%, -50%); /* Adjust position to exact center */
+}
+
+#landing {
+  max-width: 100vw; /* Adjust max-width to fit within viewport */
+  width: 100%; /* Ensure landing takes up entire width */
+  margin: 0 auto; /* Center landing horizontally */
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  background-image: url('../images/landing_page.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: darken;
+}
+
+.container {
+  margin: 65vh auto;
+}
+
+.container form {
+  float: left;
+}
+
+.container form button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin: 1.5rem auto;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.delete-button{
+  background-color:unset;
+  border: none;
+  padding: 0;
+  color: #000000;
+}
+
+.delete-button:hover {
+  border: none;
+  border-color:none;
+}
