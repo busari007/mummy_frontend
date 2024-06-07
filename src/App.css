@@ -55,7 +55,7 @@
   max-width: 100vw; /* Adjust max-width to fit within viewport */
   width: 100%; /* Ensure landing takes up entire width */
   margin: 0 auto; /* Center landing horizontally */
-  height: 100vh;
+  height: 99vh;
   display: flex;
   flex-direction: row;
   background-image: url('../images/landing_page.jpeg');
