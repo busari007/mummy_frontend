@@ -70,6 +70,8 @@
 
 .container form {
   float: left;
+  margin: 5rem auto;
+  margin-left: -22%;
 }
 
 .container form button {
