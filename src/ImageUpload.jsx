@@ -51,7 +51,6 @@ const ImageUpload = ({ onUpload }) => {
 
   return (
     <div className="container">
-    <h1>Òmose</h1>
       <form onSubmit={onSubmit}>
      <div className="form-group">
           <input
@@ -62,7 +61,6 @@ const ImageUpload = ({ onUpload }) => {
             onChange={onChange}
             ref={fileInputRef}
           />
-          <label htmlFor="fileInput">{fileName}</label>
         </div>
         <button type="submit" className="upload">Upload / Télécharger</button>
       </form>
