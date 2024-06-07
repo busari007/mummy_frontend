@@ -27,7 +27,7 @@ const ImageUpload = ({ onUpload }) => {
     formData.append('image', file);
 
     try {
-      const res = await axios.post('http://localhost:3000/upload', formData, {
+      const res = await axios.post('https://omose-pics-backend.vercel.app/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

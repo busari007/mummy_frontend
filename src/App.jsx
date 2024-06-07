@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const res = await Axios.get('http://localhost:3000/images');
+        const res = await Axios.get('https://omose-pics-backend.vercel.app/images');
         setImages(res.data);
       } catch (err) {
         console.error(err);
@@ -40,7 +40,7 @@ function App() {
 
   const handleDelete = async () => {
     try {
-      await Axios.post('http://localhost:3000/delete', { filenames: selectedImages });
+      await Axios.post('https://omose-pics-backend.vercel.app/delete', { filenames: selectedImages });
       alert('Images successfully deleted\nImages supprimées avec succès en français');
       handleReload(); // Trigger reload after deletion
       setSelectedImages([]); // Clear selected images
@@ -65,7 +65,7 @@ function App() {
           <div key={index} className="image-item-wrapper">
             <div className="image-container">
               <img
-                src={`http://localhost:3000/images/${image}`}
+                src={`https://omose-pics-backend.vercel.app/${image}`}
                 alt={image}
                 className="image-item"
               />
