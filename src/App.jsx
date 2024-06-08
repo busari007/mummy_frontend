@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import Axios from 'axios';
+import { ref, listAll, getDownloadURL, deleteObject } from "firebase/storage";
 import './App.css';
 import ImageUpload from './ImageUpload';
+import { storage } from './firebaseConfig'; // Import the storage object
 
 function App() {
   const [images, setImages] = useState([]);
@@ -10,15 +11,13 @@ function App() {
 
   useEffect(() => {
     const fetchImages = async () => {
-      try {
-        const res = await Axios.get('https://omose-pics-backend.vercel.app/images');
-        setImages(res.data);
-      } catch (err) {
-        console.error(err);
-        if(err.message === 'Network Error'){
-          alert('Server is down\nCannot fetch images\nLe serveur est indisponible\nImpossible de récupérer les images')
-        }
-      }
+      const storageRef = ref(storage, 'images');
+      const imageList = await listAll(storageRef);
+      const imageUrls = await Promise.all(imageList.items.map(async (item) => {
+        const url = await getDownloadURL(item);
+        return { name: item.name, src: url };
+      }));
+      setImages(imageUrls);
     };
 
     fetchImages();
@@ -40,23 +39,24 @@ function App() {
 
   const handleDelete = async () => {
     try {
-      await Axios.post('https://omose-pics-backend.vercel.app/delete', { filenames: selectedImages });
-      alert('Images successfully deleted\nImages supprimées avec succès en français');
+      const deletionPromises = selectedImages.map(async (imageName) => {
+        const imageRef = ref(storage, `images/${imageName}`);
+        await deleteObject(imageRef);
+      });
+
+      await Promise.all(deletionPromises);
+      alert('Images successfully deleted\nImages supprimées avec succès');
       handleReload(); // Trigger reload after deletion
       setSelectedImages([]); // Clear selected images
     } catch (err) {
       console.error(err);
-      if(err.message === 'Network Error'){
-        alert('Server is down\nCannot delete images\nLe serveur est indisponible\nImpossible de supprimer des images')
-      }else if(err.response.data.error === 'Nothing was passed in'){
-        alert('Pick something to delete\nChoisissez quelque chose à supprimer');
-      }
+      alert('Failed to delete images\nÉchec de la suppression des images');
     }
   };
 
   return (
-    <div id='webpage'> 
-     <div className="overlay"></div>
+    <div id='webpage'>
+      <div className="overlay"></div>
       <div id='landing'>
         <ImageUpload onUpload={handleReload} />
       </div>
@@ -65,15 +65,15 @@ function App() {
           <div key={index} className="image-item-wrapper">
             <div className="image-container">
               <img
-                src={`https://omose-pics-backend.vercel.app/${image}`}
-                alt={image}
+                src={image.src}
+                alt={image.name}
                 className="image-item"
               />
               <input
                 className='checkbox'
                 type="checkbox"
-                onChange={() => handleCheckboxChange(image)}
-                checked={selectedImages.includes(image)}
+                onChange={() => handleCheckboxChange(image.name)}
+                checked={selectedImages.includes(image.name)}
               />
             </div>
           </div>

@@ -1,17 +1,15 @@
 import React, { useState, useRef } from 'react';
-import axios from 'axios';
-import './App.css';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from './firebaseConfig'; // Import the storage object
 
 const ImageUpload = ({ onUpload }) => {
   const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState('Choose File');
   const fileInputRef = useRef(null);
 
   const onChange = e => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setFileName(selectedFile.name);
     }
   };
 
@@ -23,36 +21,23 @@ const ImageUpload = ({ onUpload }) => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('image', file);
+    const storageRef = ref(storage, `images/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
 
-    try {
-      const res = await axios.post('https://omose-pics-backend.vercel.app/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      console.log(res.data);
-      alert('Image successfully uploaded\nImage téléchargée avec succès');
-      onUpload(); // Trigger the reload of images
-      setFile(null); // Reset the file state
-      setFileName('Choose File'); // Reset the file name
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''; // Clear the file input field
-      }
-    } catch (err) {
-      console.error(err);
-      if(err.message === 'Network Error'){
-        alert('Server is down\nLe serveur est indisponible')
-      }
+    console.log('Uploaded image URL:', url);
+    alert('Image successfully uploaded\nImage téléchargée avec succès');
+    onUpload(); // Trigger the reload of images
+    setFile(null); // Reset the file state
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Clear the file input field
     }
   };
 
   return (
     <div className="container">
       <form onSubmit={onSubmit}>
-     <div className="form-group">
+        <div className="form-group">
           <input
             type="file"
             className="form-control-file"
